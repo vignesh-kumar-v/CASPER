@@ -1,4 +1,5 @@
 import urllib.request
+import urllib.parse
 import xml.etree.ElementTree as ET
 import os
 import json
@@ -78,8 +79,16 @@ def fetch_papers(query, k=4, output_text_file="all_papers_text.txt", output_chun
     and saves results into a single text file and a structured JSON.
     """
     base_url = "http://export.arxiv.org/api/query"
-    params = f"?search_query=all:{query}&start=0&max_results={k}&sortBy=relevance&sortOrder=descending"
-    url = base_url + params
+    
+    # Properly encode parameters to handle spaces and special characters
+    params = {
+        "search_query": f"all:{query}",
+        "start": 0,
+        "max_results": k,
+        "sortBy": "relevance",
+        "sortOrder": "descending"
+    }
+    url = base_url + "?" + urllib.parse.urlencode(params)
 
     print(f"Searching for: {query}")
     
